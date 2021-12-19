@@ -265,7 +265,7 @@ contract SupplyChain is Ownable, RetailerRole, ConsumerRole {
     // Update the appropriate fields - ownerID, retailerID, itemState
     items[_upc].itemState = State.Received;
     items[_upc].ownerID = msg.sender;
-    items[_upc].distributorID = msg.sender;
+    items[_upc].retailerID = msg.sender;
     
     // Emit the appropriate event
     emit Received(_upc);
@@ -282,7 +282,7 @@ contract SupplyChain is Ownable, RetailerRole, ConsumerRole {
     // Update the appropriate fields - ownerID, consumerID, itemState
     items[_upc].itemState = State.Purchased;
     items[_upc].ownerID = msg.sender;
-    items[_upc].distributorID = msg.sender;
+    items[_upc].consumerID = msg.sender;
     
     // Emit the appropriate event
     emit Purchased(_upc);
