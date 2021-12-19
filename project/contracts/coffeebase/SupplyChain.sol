@@ -8,9 +8,6 @@ import "./../coffeeaccesscontrol/ConsumerRole.sol";
 // Define a contract 'Supplychain'
 contract SupplyChain is Ownable, RetailerRole, ConsumerRole {
 
-  // Define 'owner'
-  address owner;
-
   // Define a variable called 'upc' for Universal Product Code (UPC)
   uint  upc;
 
@@ -143,15 +140,14 @@ contract SupplyChain is Ownable, RetailerRole, ConsumerRole {
   // and set 'sku' to 1
   // and set 'upc' to 1
   constructor() payable {
-    owner = msg.sender;
     sku = 1;
     upc = 1;
   }
 
   // Define a function 'kill' if required
   function kill() public {
-    if (msg.sender == owner) {
-      selfdestruct(payable(owner));
+    if (msg.sender == owner()) {
+      selfdestruct(payable(owner()));
     }
   }
 
@@ -306,8 +302,15 @@ contract SupplyChain is Ownable, RetailerRole, ConsumerRole {
   ) 
   {
   // Assign values to the 8 parameters
-  
-    
+  itemSKU = items[_upc].sku;
+  itemUPC = items[_upc].upc;
+  ownerID = items[_upc].ownerID;
+  originFarmerID = items[_upc].originFarmerID;
+  originFarmName = items[_upc].originFarmName;
+  originFarmInformation = items[_upc].originFarmInformation;
+  originFarmLatitude = items[_upc].originFarmLatitude;
+  originFarmLongitude = items[_upc].originFarmLongitude;
+
   return 
   (
   itemSKU,
@@ -336,7 +339,15 @@ contract SupplyChain is Ownable, RetailerRole, ConsumerRole {
   ) 
   {
     // Assign values to the 9 parameters
-  
+    itemSKU = items[_upc].sku;
+    itemUPC = items[_upc].upc;
+    productID = items[_upc].productID;
+    productNotes = items[_upc].productNotes;
+    productPrice = items[_upc].productPrice;
+    itemState =  uint(items[_upc].itemState);
+    distributorID = items[_upc].distributorID;
+    retailerID = items[_upc].retailerID;
+    consumerID = items[_upc].consumerID;
     
   return 
   (
