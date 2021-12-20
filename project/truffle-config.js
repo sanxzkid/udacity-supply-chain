@@ -10,7 +10,7 @@ module.exports = {
     // Useful for deploying to a public network.
     // NB: It's important to wrap the provider as a function.
     rinkeby: {
-      provider: () => new HDWalletProvider(process.env['RINKEBYNETMNEMONIC'], `https://rinkeby.infura.io/v3/${process.env['INFURATOKEN']}`);
+      provider: () => new HDWalletProvider(process.env['RINKEBYNETMNEMONIC'], `https://rinkeby.infura.io/v3/${process.env['INFURATOKEN']}`),
       network_id: 4,       // rinkeby's id
       gas: 5500000,        // rinkeby has a lower block limit than mainnet
       confirmations: 2,    // # of confs to wait between deployments. (default: 0)
