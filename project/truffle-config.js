@@ -1,7 +1,4 @@
-const HDWallet = require('truffle-hdwallet-provider');
-const infuraKey = "fj4jll3k.....";
-
-const mnemonic = 'spirit supply whale amount human item harsh scare congress discover talent hamster'
+const HDWalletProvider = require('@truffle/hdwallet-provider');
 
 module.exports = {
   networks: {
