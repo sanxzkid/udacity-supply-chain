@@ -2,11 +2,14 @@
 pragma solidity >=0.7.0 < 0.9.0;
 
 import "./../coffeecore/Ownable.sol";
+import "./../coffeeaccesscontrol/Roles.sol";
+import "./../coffeeaccesscontrol/FarmerRole.sol";
+import "./../coffeeaccesscontrol/DistributorRole.sol";
 import "./../coffeeaccesscontrol/RetailerRole.sol";
 import "./../coffeeaccesscontrol/ConsumerRole.sol";
 
 // Define a contract 'Supplychain'
-contract SupplyChain is Ownable, RetailerRole, ConsumerRole {
+contract SupplyChain is Ownable, FarmerRole, DistributorRole, RetailerRole, ConsumerRole {
 
   // Define a variable called 'upc' for Universal Product Code (UPC)
   uint  upc;
@@ -153,6 +156,8 @@ contract SupplyChain is Ownable, RetailerRole, ConsumerRole {
 
   // Define a function 'harvestItem' that allows a farmer to mark an item 'Harvested'
   function harvestItem(uint _upc, address _originFarmerID, string memory _originFarmName, string memory _originFarmInformation, string memory _originFarmLatitude, string memory _originFarmLongitude, string memory _productNotes) public 
+  // Call modifier to verify caller of this function
+  onlyFarmer()
   {
     // Add the new item as part of Harvest
     items[sku] = Item({ 
@@ -183,7 +188,7 @@ contract SupplyChain is Ownable, RetailerRole, ConsumerRole {
   // Call modifier to check if upc has passed previous supply chain stage
   harvested(_upc)
   // Call modifier to verify caller of this function
-  verifyCaller(items[_upc].originFarmerID)
+  onlyFarmer()
   {
     // Update the appropriate fields
     items[_upc].itemState = State.Processed;
@@ -196,7 +201,7 @@ contract SupplyChain is Ownable, RetailerRole, ConsumerRole {
   // Call modifier to check if upc has passed previous supply chain stage
   processed(_upc)
   // Call modifier to verify caller of this function
-  verifyCaller(items[_upc].originFarmerID)
+  onlyFarmer()
   {
     // Update the appropriate fields
     items[_upc].itemState = State.Packed;
@@ -209,7 +214,7 @@ contract SupplyChain is Ownable, RetailerRole, ConsumerRole {
   // Call modifier to check if upc has passed previous supply chain stage
   packed(_upc)
   // Call modifier to verify caller of this function
-  verifyCaller(items[_upc].originFarmerID)
+  onlyFarmer()
   {
     // Update the appropriate fields
     items[_upc].itemState = State.ForSale;
@@ -224,6 +229,8 @@ contract SupplyChain is Ownable, RetailerRole, ConsumerRole {
   function buyItem(uint _upc) public payable 
     // Call modifier to check if upc has passed previous supply chain stage
     forSale(_upc)
+    // Call modifier to verify caller of this function
+    onlyDistributor()
     // Call modifer to check if buyer has paid enough
     paidEnough(items[_upc].productPrice)
     // Call modifer to send any excess ether back to buyer
@@ -246,7 +253,7 @@ contract SupplyChain is Ownable, RetailerRole, ConsumerRole {
     // Call modifier to check if upc has passed previous supply chain stage
     sold(_upc)
     // Call modifier to verify caller of this function
-    verifyCaller(items[_upc].distributorID)
+    onlyDistributor()
     {
     // Update the appropriate fields
     items[_upc].itemState = State.Shipped;
